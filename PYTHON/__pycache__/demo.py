@@ -30,11 +30,11 @@ else:
     print('\nPRIMEIRO COMANDO - POSICAL INICIAL\n');
     try:
         braco.write(HOME_POS)
-        print(' Envio de comando com teste de envio: %s \n' % (HOME_POS))
+        print('Envio de comando com teste de envio: %s \n' % (HOME_POS))
     except:
         print('Problema no envio do comando\nAbortando o programa...')
         
-    raw_input('Pressione ENTER para continuar...')
+    input("Pressione ENTER para continuar...")
     
     #############################
     ##### SEGUNDO COMANDO #######
@@ -42,14 +42,14 @@ else:
     
     print('\nSEGUNDO COMANDO - MOVER O PUNHO\n');
     print('Espere 5 segundos...\n');
-    time.sleep(2)
+    time.sleep(5)
     try:
-        braco.write('#3P1900T1500\r')
-        print('Envio de comando com teste de envio: %s \n' % ('#3P1900T1500\r'))
+        braco.write('#2P1500T1500\r')
+        print('Envio de comando com teste de envio: %s \n' % ('#0P1000T1500\r'))
     except:
         print('Problema no envio do comando\nAbortando o programa...')
         
-    raw_input("Pressione ENTER para continuar...")
+    input("Pressione ENTER para continuar...")
     
     #############################
     ##### TERCEIRO COMANDO ######
@@ -57,9 +57,9 @@ else:
     
     print('\nTERCEIRO COMANDO - MOVER A GARRA\n');
     print('Espere 5 segundos...\n');
-    time.sleep(2)
+    time.sleep(5)
     try:
-        braco.write('#%dP%dT%d\r' % (4,2400,1500))
+        braco.write('#%dP%dT%d\r' % (4,2500,1500))
         print('Envio de comando com teste de envio: %s \n' % ('#4P2500T1500\r'))
     except:
         print('Problema no envio do comando\nAbortando o programa...')
