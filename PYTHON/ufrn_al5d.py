@@ -60,6 +60,7 @@ stopbits=int(self.STOPBITS),
 parity=self.PARITY,
 xonxoff = self.XONXOFF,
 rtscts= self.RTSCTS)
+            self.open_port()
             #print ('Porta serial /dev/ttyS0 aberta com sucesso\n')
             return 1
         except IOError as e:
@@ -73,7 +74,7 @@ rtscts= self.RTSCTS)
     def open_port(self):
         if not self.serial_port.is_open:
             self.serial_port.open()
-            print('Porta serial /dev/ttyS0 aberta com sucesso!\n')
+            #print('Porta serial /dev/ttyS0 aberta com sucesso!\n')
 
     #4. Close Serial Port        
     def close_port(self):
@@ -81,7 +82,7 @@ rtscts= self.RTSCTS)
         del self.serial_port
     
     #5 Write 
-    def write_port(self,cmd):
+    def write(self,cmd):
         n = self.serial_port.write(cmd)
         if n < 0:
             n = -1
@@ -93,7 +94,7 @@ rtscts= self.RTSCTS)
     def test(self):
         print
         print ('\nObtendo informacoes sobre a comunicacao serial\n')
-        time.sleep(1.8) # Entre 1.5s a 2s
+        time.sleep(2) # Entre 1.5s a 2s
         print ('\nStatus Porta: %s ' % (self.serial_port.isOpen()))
         print ('Device conectado: %s ' % (self.serial_port.name))
         print ('Dump da configuracao:\n %s ' % (self.serial_port))
@@ -102,5 +103,5 @@ rtscts= self.RTSCTS)
         time.sleep(2) # Entre 1.5s a 2s
         self.serial_port.write('#0P1500#1P1500#2P1500#3P1500#4P1500T1500\r')
         time.sleep(2)
-        self.write_port('#0P1000T200\r')
+        self.write('#0P1000T200\r')
         
