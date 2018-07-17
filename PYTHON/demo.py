@@ -9,17 +9,66 @@ Created on Mon Jul 16 16:22:48 2018
 from ufrn_al5d import RoboticArmAL5D
 import time
 
+
+###################################
+######    CANAIS DOS SERVOS  ###### 
+###### E LIMITES DE OPERAÇÃO ######
+###################################
+#0. BASE
+BAS_SERVO = 0
+#LIMITES
+BAS_MIN = 500
+BAS_MAX = 2400
+
+#1. SHOULDER
+SHL_SERVO = 1
+#LIMITES
+SHL_MIN = 1200
+SHL_MAX = 2000
+
+#2. ELBOW
+ELB_SERVO = 2
+#LIMITES
+ELB_MIN = 1100
+ELB_MAX = 2000
+
+#3. WRIST
+WRI_SERVO = 3
+#LIMITES
+WRI_MIN = 500
+WRI_MAX = 2500
+
+#4. GRIPPER
+GRI_SERVO = 4
+#LIMITES
+GRI_MIN = 1300
+GRI_MAX = 2400
+
+#PROPRIEDADES DO BRAÇO: SERVOS E LIMITES DE OPERACAO
+properties = [BAS_SERVO, BAS_MIN, BAS_MAX,
+              SHL_SERVO, SHL_MIN, SHL_MAX,
+              ELB_SERVO, ELB_MIN, ELB_MAX,
+              WRI_SERVO, WRI_MIN, WRI_MAX,
+              GRI_SERVO, GRI_MIN, GRI_MAX]
+##################################
+
+##################################
+#######    PROGRAMA DEMO   #######
+##################################
+
 #POSICAO INICIAL PARA TODOS OS SERVOS
 HOME_POS = '#0P1500#1P1500#2P1500#3P1500#4P1500T1500\r'
 
-#BRACO INICIALIZADO
-braco = RoboticArmAL5D()
+#INICIALIZACAO DO BRACO PASSANDO AS PROPRIEDADES COMO PARAMETRO
+braco = RoboticArmAL5D(properties)
 
 #CONFIGURACAO DA PORTA
-if(braco.setup() == -1):
+braco.setup()
+
+#ABRINDO A PORTA
+if(braco.abre_porta() == -1):
     print ('Erro abrindo a porta serial /dev/ttyS0\nAbortando o programa...\n')
-else:
-    # INICIO DO PROGRAMA DEMO 
+else: 
     print('PROGRAMA DEMONSTRACAO INICIADO\n\n');
     print ('Porta serial /dev/ttyS0 aberta com sucesso\n')
     
@@ -29,7 +78,7 @@ else:
     
     print('\nPRIMEIRO COMANDO - POSICAL INICIAL\n');
     try:
-        braco.write(HOME_POS)
+        braco.envia_comando(HOME_POS)
         print(' Envio de comando com teste de envio: %s \n' % (HOME_POS))
     except:
         print('Problema no envio do comando\nAbortando o programa...')
@@ -41,13 +90,10 @@ else:
     #############################
     
     print('\nSEGUNDO COMANDO - MOVER O PUNHO\n');
-    print('Espere 5 segundos...\n');
+    print('Espere 2 segundos...\n');
     time.sleep(2)
-    try:
-        braco.write('#3P1900T1500\r')
-        print('Envio de comando com teste de envio: %s \n' % ('#3P1900T1500\r'))
-    except:
-        print('Problema no envio do comando\nAbortando o programa...')
+    print('Envio de comando SEM teste de envio: %s \n' % ('#3P1900T1500\r'))
+    braco.envia_comando('#3P1900T1500\r')
         
     raw_input("Pressione ENTER para continuar...")
     
@@ -56,16 +102,35 @@ else:
     #############################
     
     print('\nTERCEIRO COMANDO - MOVER A GARRA\n');
-    print('Espere 5 segundos...\n');
+    print('Espere 2 segundos...\n');
     time.sleep(2)
     try:
-        braco.write('#%dP%dT%d\r' % (4,2400,1500))
+        braco.envia_comando('#%dP%dT%d\r' % (4,2400,1500))
         print('Envio de comando com teste de envio: %s \n' % ('#4P2500T1500\r'))
     except:
         print('Problema no envio do comando\nAbortando o programa...')
         
+    #############################
+    ###### QUARTO COMANDO  ######
+    ###### TESTE DE TRAVAS ######
+    #############################
+    
+    print('\nQUARTO COMANDO - MOVER A BASE TESTANDO TRAVAS\n');
+    print('Espere 2 segundos...\n');
+    time.sleep(2)
+    try:
+        #FUNCAO TRAVA (trava) RECEBE COMO PARAMETROS
+        #O SERVO E O VALOR DA POSICAO DESEJADA E
+        #RETORNA A POSICAO CORRIGIDA DE ACORDO COM OS LIMITES MAX E MIN
+        #ANTERIORMENTE ESTABELECIDOS
+        pos = braco.trava(BAS_SERVO,2500)
+        braco.envia_comando('#%dP%dT%d\r' % (BAS_SERVO,pos,1500))
+        print('Envio de comando com teste de envio e de travas: %s \n' % ('#4P2500T1500\r'))
+    except:
+        print('Problema no envio do comando\nAbortando o programa...')
+        
     ##FIM DO PROGRAMA DEMO##
-    braco.close_port()
+    braco.fecha_porta()
     print('\nAcesso a porta serial /dev/ttyS0 finalizado\n');
     
 print('\nPROGRAMA DEMONSTRACAO FINALIZADO\n\n');
