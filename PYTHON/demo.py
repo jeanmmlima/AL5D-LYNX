@@ -57,7 +57,7 @@ properties = [BAS_SERVO, BAS_MIN, BAS_MAX,
 ##################################
 
 #POSICAO INICIAL PARA TODOS OS SERVOS
-HOME_POS = '#0P1500#1P1500#2P1500#3P1500#4P1500T1500\r'
+HOME_POS = '#0P1500#1P1500#2P1500#3P1500#4P1500T1500'
 
 #INICIALIZACAO DO BRACO PASSANDO AS PROPRIEDADES COMO PARAMETRO
 braco = RoboticArmAL5D(properties)
@@ -76,7 +76,7 @@ else:
     ##### PRIMEIRO COMANDO ######
     #############################
     
-    print('\nPRIMEIRO COMANDO - POSICAL INICIAL\n');
+    print('\nPRIMEIRO COMANDO - POSICAL INICIAL\n')
     try:
         braco.envia_comando(HOME_POS)
         print(' Envio de comando com teste de envio: %s \n' % (HOME_POS))
@@ -89,11 +89,11 @@ else:
     ##### SEGUNDO COMANDO #######
     #############################
     
-    print('\nSEGUNDO COMANDO - MOVER O PUNHO\n');
-    print('Espere 2 segundos...\n');
+    print('\nSEGUNDO COMANDO - MOVER O PUNHO\n')
+    print('Espere 2 segundos...\n')
     time.sleep(2)
-    print('Envio de comando SEM teste de envio: %s \n' % ('#3P1900T1500\r'))
-    braco.envia_comando('#3P1900T1500\r')
+    print('Envio de comando SEM teste de envio: %s \n' % ('#3P1900T1500'))
+    braco.envia_comando('#3P1900T1500')
         
     raw_input("Pressione ENTER para continuar...")
     
@@ -101,39 +101,40 @@ else:
     ##### TERCEIRO COMANDO ######
     #############################
     
-    print('\nTERCEIRO COMANDO - MOVER A GARRA\n');
-    print('Espere 2 segundos...\n');
+    print('\nTERCEIRO COMANDO - MOVER A GARRA\n')
+    print('Espere 2 segundos...\n')
     time.sleep(2)
     try:
-        braco.envia_comando('#%dP%dT%d\r' % (4,2400,1500))
-        print('Envio de comando com teste de envio: %s \n' % ('#4P2500T1500\r'))
+        braco.envia_comando('#%dP%dT%d' % (4,2400,1500))
+        print('Envio de comando com teste de envio: %s \n' % ('#4P2500T1500'))
     except:
         print('Problema no envio do comando\nAbortando o programa...')
-        
+    
+    raw_input("Pressione ENTER para continuar...")    
     #############################
     ###### QUARTO COMANDO  ######
     ###### TESTE DE TRAVAS ######
     #############################
     
-    print('\nQUARTO COMANDO - MOVER A BASE TESTANDO TRAVAS\n');
-    print('Espere 2 segundos...\n');
+    print('\nQUARTO COMANDO - MOVER A BASE TESTANDO TRAVAS\n')
+    print('Espere 2 segundos...\n')
     time.sleep(2)
     try:
         #FUNCAO TRAVA (trava) RECEBE COMO PARAMETROS
         #O SERVO E O VALOR DA POSICAO DESEJADA E
         #RETORNA A POSICAO CORRIGIDA DE ACORDO COM OS LIMITES MAX E MIN
         #ANTERIORMENTE ESTABELECIDOS
-        pos = braco.trava(BAS_SERVO,2500)
-        braco.envia_comando('#%dP%dT%d\r' % (BAS_SERVO,pos,1500))
-        print('Envio de comando com teste de envio e de travas: %s \n' % ('#4P2500T1500\r'))
+        pos = braco.trava(BAS_SERVO,99999)
+        braco.envia_comando('#%dP%dT%d' % (BAS_SERVO,pos,1500))
+        print('Envio de comando com teste de envio e de travas: %s \n' % ('#0P%sT1500' % (pos)))
     except:
         print('Problema no envio do comando\nAbortando o programa...')
         
     ##FIM DO PROGRAMA DEMO##
     braco.fecha_porta()
-    print('\nAcesso a porta serial /dev/ttyS0 finalizado\n');
+    print('\nAcesso a porta serial /dev/ttyS0 finalizado\n')
     
-print('\nPROGRAMA DEMONSTRACAO FINALIZADO\n\n');
+print('\nPROGRAMA DEMONSTRACAO FINALIZADO\n\n')
     
     
     

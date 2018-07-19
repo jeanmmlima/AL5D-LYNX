@@ -15,6 +15,10 @@ import sys
 class RoboticArmAL5D:
     """Driver do Braco Robotico AL5D"""
     #1. Parameters
+    #__init__: Funcao chamada ao criar um instancia
+	# da classe RoboticArmAL5D. Recebe como parametros 
+	# as propriedades do braco: Numeros correspondentes
+	# aos servos e respectivos limites
     def __init__(self,properties):
         self.SERIAL_PORT='/dev/ttyS0' #Serial
         self.BAUD_RATE='115200'       #Set Baud rates to 115200
@@ -101,13 +105,17 @@ rtscts= self.RTSCTS)
     
     #5 Write 
     def envia_comando(self,cmd):
-        n = self.serial_port.write(cmd)
-        if n < 0:
-            n = -1
-            return n
-        else:
-            return n
+        self.serial_port.write('%s\r' % (cmd))
+#        if n < 0:
+#            n = -1
+#            return n
+#        else:
+#            return n
     
+    #trava: Travas de seguranca. Recebe como parametro
+	#o canal, isto e, o servo que se deseja comunicar
+	#e a posicao desejada. Testa a posicao de acordo
+	#com os limites pre-estabelecidos para o servo
     def trava(self,channel,pos):
         #BAS_SERVO
         if channel == self.BAS_SERVO:
@@ -166,5 +174,5 @@ rtscts= self.RTSCTS)
         time.sleep(2) # Entre 1.5s a 2s
         self.serial_port.write('#0P1500#1P1500#2P1500#3P1500#4P1500T1500\r')
         time.sleep(2)
-        self.envia_comando('#0P1000T200\r')
+        self.envia_comando('#0P1000T200')
         
