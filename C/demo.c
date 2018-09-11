@@ -90,7 +90,7 @@ int main()
 //		sprintf(comando,"#%dP%d",GRI_SERVO,1000);
 
 		// TESTE DA FUNCAO TRAVA //
-		sprintf(comando,"#2P1500");
+		sprintf(comando,"#%dP%d",BAS_SERVO,trava(BAS_SERVO,545451584541894));
 
 		printf("Envio de comando sem teste de envio, utilizando a funcao trava: %s\n",comando);
 		enviar_comando(comando,serial_fd);
