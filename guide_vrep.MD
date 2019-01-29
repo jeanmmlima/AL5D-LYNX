@@ -35,4 +35,23 @@ extern "C" {
 }
 
 ```
-5. Folders *remoteApi*  and *include* can be found in the VREP installation folder. Copy them to the same directory where you created the main.cpp file. 
+5. To use the remote API functionality in your C/C++ application, just include following C-language files in your project:
+
+- extApi.h 
+
+- extApi.c 
+
+- extApiPlatform.h (contains platform specific code)
+
+- extApiPlatform.c (contains platform specific code)
+
+Above files are located in V-REP's installation directory, under programming/remoteApi. 
+
+6. To enable the remote API on the client side (i.e. your application), call **simxStart**.
+
+```
+//Example
+int clientID=simxStart((simxChar*)serverIP.c_str(),serverPort,true,true,3000,5);
+
+```
+![This page](http://www.coppeliarobotics.com/helpFiles/en/remoteApiFunctions.htm) This page lists and describes all supported C/C++ remote API functions
