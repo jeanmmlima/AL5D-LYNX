@@ -8,7 +8,9 @@ V-rep based simulator for robotic arm AL5D-LYNX
 ## RUNNING V-REP 
 1. Open Terminal
 2. Go to VREP installation folder
-3. Execute vrep.sh: user@host$ ./vrep.sh
+3. Execute vrep.sh: 
+
+`user@host$ ./vrep.sh`
 
 ## USING REMOTE API
 
@@ -24,4 +26,13 @@ function sysCall_init()
     simRemoteApi.start(19999)
 end
 ```
-3. Comment any code of the model in the function *sysCall_actuation()*
+3. Comment any code of the model in the function *sysCall_actuation()*.
+4. Create a file main.cpp and import the remote api file.
+```
+
+extern "C" {
+  #include "remoteApi/extApi.h"
+}
+
+```
+5. Folders *remoteApi*  and *include* can be found in the VREP installation folder. Copy them to the same directory where you created the main.cpp file. 
