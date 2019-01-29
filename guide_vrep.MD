@@ -14,7 +14,7 @@ V-rep based simulator for robotic arm AL5D-LYNX
 
 1. To enable the remote API on the server side (i.e. on V-REP's side), make sure the remote API plugin was successfully loaded at V-REP start-up (you can inspect the terminal for information related to plugin loading) .
 
-2. Go to Main Script of your scene. In the funcion *sysCall_init()*, call *simRemoteApi.start(19999)*. The socket number is 19999 in this case.
+2. Go to Main Script of your scene. In the funcion *sysCall_init()*, call *simRemoteApi.start(19999)*. The socket port is 19999 in this case.
 
 ```
 function sysCall_init()
@@ -24,3 +24,4 @@ function sysCall_init()
     simRemoteApi.start(19999)
 end
 ```
+3. Comment any code of the model in the function *sysCall_actuation()*
