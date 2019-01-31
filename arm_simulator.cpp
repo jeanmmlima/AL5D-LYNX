@@ -18,7 +18,8 @@ extern "C" {
 using namespace std;
 
 int main(int argc, char **argv){
-
+	
+	//inicial variables	
 	string serverIP = "127.0.0.1";
 	int serverPort = 19999;
 	int jointHandles[4];
