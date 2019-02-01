@@ -66,7 +66,7 @@ int main(int argc, char **argv){
      		if(simxGetObjectHandle(clientID,(const simxChar*) jointNames[i].c_str(),(simxInt *) &jointHandles[i], (simxInt) simx_opmode_oneshot_wait) != simx_return_ok)
 				cout << "Handle da junta " << jointNames[i] << " nao encontrado!" << endl;
       		else{
-        		cout << "Conectado ao sensor " << sensorNome[i] << std::endl;				
+        		cout << "Conectado ao sensor " << jointNames[i] << endl;				
       		}
     	}
 
