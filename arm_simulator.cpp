@@ -14,6 +14,7 @@ extern "C" {
 
 #include <iostream>
 #include <string>
+#include <math.h>
 
 using namespace std;
 
@@ -26,6 +27,7 @@ int main(int argc, char **argv){
 	string jointNames[4];
 	int modelBase = 0;
 	string modelBaseName = "";
+	string gripper = "PhantomXPincher_gripperClose";
 	
 	//setup some of the RML vectors
 	
@@ -36,7 +38,7 @@ int main(int argc, char **argv){
 	float maxVel[4] = {vel*M_PI/180,vel*M_PI/180,vel*M_PI/180,vel*M_PI/180};
 	float maxAccel[4] = {accel*M_PI/180,accel*M_PI/180,accel*M_PI/180,accel*M_PI/180};
 	float maxJerk[4] = {jerk*M_PI/180,jerk*M_PI/180,jerk*M_PI/180,jerk*M_PI/180};
-	float targetVel = {0,0,0,0};
+	float targetVel[4] = {0,0,0,0};
 
 	/*Para conectar um server, usar a funcao simxStart()
 	  
@@ -61,7 +63,7 @@ int main(int argc, char **argv){
       	//iniciando as juntas
 
       	for(int i = 0; i < 4; i++){
-      		sensorNome[i] = "PhantomXPincher_joint" + to_string(i + 1);
+      		jointNames[i] = "PhantomXPincher_joint" + to_string(i + 1);
       
      		if(simxGetObjectHandle(clientID,(const simxChar*) jointNames[i].c_str(),(simxInt *) &jointHandles[i], (simxInt) simx_opmode_oneshot_wait) != simx_return_ok)
 				cout << "Handle da junta " << jointNames[i] << " nao encontrado!" << endl;
@@ -74,7 +76,16 @@ int main(int argc, char **argv){
     	// Enquanto a simulacao for ativa
     	while(simxGetConnectionId(clientID)!=-1){
 
+    		//Abre e fecha a garra a cada segundo
+    		simxSetIntegerSignal(clientID,(const simxChar*) gripper.c_str(),(simxInt) 1, (simxInt) simx_opmode_oneshot);
+			extApi_sleepMs(1000);    		
+			simxSetIntegerSignal(clientID,(const simxChar*) gripper.c_str(),(simxInt) 0, (simxInt) simx_opmode_oneshot);
+			extApi_sleepMs(1000); 
+
     	}
+
+    	simxFinish(clientID); // fechando conexao com o servidor
+    	cout << "Conexao fechada!" << std::endl;
     
 
   	}
