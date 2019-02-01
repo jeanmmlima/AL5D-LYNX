@@ -37,5 +37,54 @@ int main(int argc, char **argv){
 	float maxAccel[4] = {accel*M_PI/180,accel*M_PI/180,accel*M_PI/180,accel*M_PI/180};
 	float maxJerk[4] = {jerk*M_PI/180,jerk*M_PI/180,jerk*M_PI/180,jerk*M_PI/180};
 	float targetVel = {0,0,0,0};
+
+	/*Para conectar um server, usar a funcao simxStart()
+	  
+		simxStart(connectionAddress, connection Port,
+					waitUntilConnected, doNotReconnectOnceDisconnected,
+					timeOutInMs, commThreadCycleInMs)
+
+	*/
+  	int clientID=simxStart((simxChar*)serverIP.c_str(),serverPort,true,true,2000,5);
+
+  	if(clientID  != -1){
+
+  		cout << "Servidor conectado!" << endl;
+
+  		//iniciando modelo base
+
+  		if(simxGetObjectHandle(clientID,(const simxChar*) "PhantomXPincher",(simxInt *) &modelBase, (simxInt) simx_opmode_oneshot_wait) != simx_return_ok)
+      		cout << "Handle do modelo base nao encontrado!" << endl;  
+    	else
+      		cout << "Conectado ao modelo base!" << endl;
+
+      	//iniciando as juntas
+
+      	for(int i = 0; i < 4; i++){
+      		sensorNome[i] = "PhantomXPincher_joint" + to_string(i + 1);
+      
+     		if(simxGetObjectHandle(clientID,(const simxChar*) jointNames[i].c_str(),(simxInt *) &jointHandles[i], (simxInt) simx_opmode_oneshot_wait) != simx_return_ok)
+				cout << "Handle da junta " << jointNames[i] << " nao encontrado!" << endl;
+      		else{
+        		cout << "Conectado ao sensor " << sensorNome[i] << std::endl;				
+      		}
+    	}
+
+
+    	// Enquanto a simulacao for ativa
+    	while(simxGetConnectionId(clientID)!=-1){
+
+    	}
+    
+
+  	}
+  	else{
+  		cout << "Não foi possível conectar ao servidor!" << endl;
+  		return 0;
+  	}
+
+
 	
+
+
 }
