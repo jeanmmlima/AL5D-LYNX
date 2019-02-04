@@ -82,6 +82,36 @@ int main(int argc, char **argv){
 			simxSetIntegerSignal(clientID,(const simxChar*) gripper.c_str(),(simxInt) 0, (simxInt) simx_opmode_oneshot);
 			extApi_sleepMs(1000); 
 
+			// Base - joint[0]
+
+			simxSetJointTargetPosition(clientID,jointHandles[0], (simxFloat) 90*M_PI/180, (simxInt) simx_opmode_streaming);
+			extApi_sleepMs(1000);
+			simxSetJointTargetPosition(clientID,jointHandles[0], (simxFloat) 0*M_PI/180, (simxInt) simx_opmode_streaming);
+			extApi_sleepMs(1000);
+
+			/* - joint[1]
+
+			simxSetJointTargetPosition(clientID,jointHandles[1], (simxFloat) 90*M_PI/180, (simxInt) simx_opmode_streaming);
+			extApi_sleepMs(1000);
+			simxSetJointTargetPosition(clientID,jointHandles[1], (simxFloat) 0*M_PI/180, (simxInt) simx_opmode_streaming);
+			extApi_sleepMs(1000);	
+
+			*/	
+
+			// Cotovelo - joint[2]
+
+			simxSetJointTargetPosition(clientID,jointHandles[2], (simxFloat) 90*M_PI/180, (simxInt) simx_opmode_streaming);
+			extApi_sleepMs(1000);
+			simxSetJointTargetPosition(clientID,jointHandles[2], (simxFloat) 0*M_PI/180, (simxInt) simx_opmode_streaming);
+			extApi_sleepMs(1000);	
+
+			// Punho - joint[3]
+
+			simxSetJointTargetPosition(clientID,jointHandles[3], (simxFloat) 90*M_PI/180, (simxInt) simx_opmode_streaming);
+			extApi_sleepMs(1000);
+			simxSetJointTargetPosition(clientID,jointHandles[3], (simxFloat) 0*M_PI/180, (simxInt) simx_opmode_streaming);
+			extApi_sleepMs(1000);
+
     	}
 
     	simxFinish(clientID); // fechando conexao com o servidor
