@@ -81,6 +81,39 @@ void envia_comando(char cmd[]){
 	char temp[3] = "000,"; //range de operacao 500 a 2500
 	int pos = 0;
 	int positionInt = atoi(temp);
+
+	for(int i = 0; i < tam; i++){
+	
+
+		if(cmd[i] == '#' && i == 0){
+			printf("\nNovo comando: \n");
+			pos = 0;
+		}
+		else if(cmd[i] == '#' && i != 0){
+			position = atof(temp);
+			positionInt = atoi(temp);
+			printf("\nPosicao valor float: %f",position);
+			printf("\nPosicao valor inteiro: %i",positionInt);
+			printf("\nNovo comando: \n");
+			pos = 0;
+		}
+		else if(cmd[i-1]=='#'){
+			printf("Servo %c ",cmd[i]);
+		}
+		else if(cmd[i] !='P'){
+			temp[pos] = cmd[i];
+			printf("%c",temp[pos]);
+			pos = pos + 1;
+
+			if(i == tam-1){
+				position = atof(temp);
+				positionInt = atoi(temp);
+				printf("\nPosicao valor float: %f",position);
+				printf("\nPosicao valor inteiro: %i",positionInt);
+			}
+			
+		}
+	}
 }
 
 int main(){
