@@ -27,7 +27,12 @@ int abre_porta();
 void setup(int);
 void fecha_porta(int);
 int simulacao_ativa(int);
-void envia_comando(char[]);
+void envia_comando(int,char[]);
+
+//500-2500 position TO angles 
+
+//base: 500 - 2400
+float setPosBase(int);
 
 
 int abre_porta(){
@@ -75,7 +80,7 @@ int simulacao_ativa(int clientID){
 	return simxGetConnectionId(clientID);
 }
 
-void envia_comando(char cmd[]){
+void envia_comando(int clientID, char cmd[]){
 
 	int tam = (int)strlen(cmd);
 	char temp[3] = "000,"; //range de operacao 500 a 2500
@@ -90,10 +95,10 @@ void envia_comando(char cmd[]){
 			pos = 0;
 		}
 		else if(cmd[i] == '#' && i != 0){
-			position = atof(temp);
 			positionInt = atoi(temp);
-			printf("\nPosicao valor float: %f",position);
 			printf("\nPosicao valor inteiro: %i",positionInt);
+			simxSetJointTargetPosition(clientID,jointHandles[0], (simxFloat) setPosBase(positionInt)*M_PI/180, (simxInt) simx_opmode_streaming);
+			extApi_sleepMs(1000);
 			printf("\nNovo comando: \n");
 			pos = 0;
 		}
@@ -106,14 +111,18 @@ void envia_comando(char cmd[]){
 			pos = pos + 1;
 
 			if(i == tam-1){
-				position = atof(temp);
 				positionInt = atoi(temp);
-				printf("\nPosicao valor float: %f",position);
 				printf("\nPosicao valor inteiro: %i",positionInt);
+				simxSetJointTargetPosition(clientID,jointHandles[0], (simxFloat) setPosBase(positionInt)*M_PI/180, (simxInt) simx_opmode_streaming);
+				extApi_sleepMs(1000);
 			}
 			
 		}
 	}
+}
+
+float setPosBase(int pos){
+	return 0.09474 * pos - 137.36842;
 }
 
 int main(){
@@ -138,7 +147,7 @@ int main(){
 
 
     	// Enquanto a simulacao for ativa
-    	while(simulacao_ativa()!=-1){
+    	while(simulacao_ativa(clientID)!=-1){
 
     		//Abre e fecha a garra a cada segundo
     		simxSetIntegerSignal(clientID,(const simxChar*) gripper,(simxInt) 1, (simxInt) simx_opmode_oneshot);
@@ -148,10 +157,15 @@ int main(){
 
 			// Base - joint[0]
 
-			simxSetJointTargetPosition(clientID,jointHandles[0], (simxFloat) 90*M_PI/180, (simxInt) simx_opmode_streaming);
+			/*simxSetJointTargetPosition(clientID,jointHandles[0], (simxFloat) 90*M_PI/180, (simxInt) simx_opmode_streaming);
 			extApi_sleepMs(1000);
 			simxSetJointTargetPosition(clientID,jointHandles[0], (simxFloat) 0*M_PI/180, (simxInt) simx_opmode_streaming);
 			extApi_sleepMs(1000);
+			*/
+
+			envia_comando(clientID,"#0P2400");
+			envia_comando(clientID,"#0P1500");
+			envia_comando(clientID,"#0P500");
 
 			/* - joint[1]
 
