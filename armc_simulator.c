@@ -32,7 +32,7 @@ void envia_comando(int,char[]);
 //500-2500 position TO angles 
 
 //base: 500 - 2400
-float setPosBase(int);
+float getPosBase(int);
 
 
 int abre_porta(){
@@ -83,9 +83,11 @@ int simulacao_ativa(int clientID){
 void envia_comando(int clientID, char cmd[]){
 
 	int tam = (int)strlen(cmd);
-	char temp[3] = "000,"; //range de operacao 500 a 2500
+	char temp[3]; //range de operacao 500 a 2500
+	sprintf(temp,"000,");
 	int pos = 0;
 	int positionInt = atoi(temp);
+	int serv;
 
 	for(int i = 0; i < tam; i++){
 	
@@ -96,14 +98,16 @@ void envia_comando(int clientID, char cmd[]){
 		}
 		else if(cmd[i] == '#' && i != 0){
 			positionInt = atoi(temp);
-			printf("\nPosicao valor inteiro: %i",positionInt);
-			simxSetJointTargetPosition(clientID,jointHandles[0], (simxFloat) setPosBase(positionInt)*M_PI/180, (simxInt) simx_opmode_streaming);
+			float jointPos = getPosBase(positionInt);
+			simxSetJointTargetPosition(clientID,jointHandles[serv], (simxFloat) jointPos*M_PI/180, (simxInt) simx_opmode_streaming);
 			extApi_sleepMs(1000);
 			printf("\nNovo comando: \n");
 			pos = 0;
+			sprintf(temp,"000,");
 		}
 		else if(cmd[i-1]=='#'){
-			printf("Servo %c ",cmd[i]);
+			serv = (int) cmd[i] - '0';
+			printf("Servo %i ",serv);
 		}
 		else if(cmd[i] !='P'){
 			temp[pos] = cmd[i];
@@ -112,17 +116,18 @@ void envia_comando(int clientID, char cmd[]){
 
 			if(i == tam-1){
 				positionInt = atoi(temp);
-				printf("\nPosicao valor inteiro: %i",positionInt);
-				simxSetJointTargetPosition(clientID,jointHandles[0], (simxFloat) setPosBase(positionInt)*M_PI/180, (simxInt) simx_opmode_streaming);
+				float jointPos = getPosBase(positionInt);
+				simxSetJointTargetPosition(clientID,jointHandles[serv], (simxFloat) jointPos*M_PI/180, (simxInt) simx_opmode_streaming);
 				extApi_sleepMs(1000);
+				sprintf(temp,"000,");
 			}
 			
 		}
 	}
 }
 
-float setPosBase(int pos){
-	return 0.09474 * pos - 137.36842;
+float getPosBase(int pos){
+	return ((0.0947 * pos) - 137.3684);
 }
 
 int main(){
@@ -156,16 +161,21 @@ int main(){
 			extApi_sleepMs(1000); 
 
 			// Base - joint[0]
-
-			/*simxSetJointTargetPosition(clientID,jointHandles[0], (simxFloat) 90*M_PI/180, (simxInt) simx_opmode_streaming);
+			/*	
+			simxSetJointTargetPosition(clientID,jointHandles[0], (simxFloat) 90*M_PI/180, (simxInt) simx_opmode_streaming);
+			extApi_sleepMs(1000);
+			simxSetJointTargetPosition(clientID,jointHandles[0], (simxFloat) 0*M_PI/180, (simxInt) simx_opmode_streaming);
+			extApi_sleepMs(1000);
+			simxSetJointTargetPosition(clientID,jointHandles[0], (simxFloat) -90*M_PI/180, (simxInt) simx_opmode_streaming);
 			extApi_sleepMs(1000);
 			simxSetJointTargetPosition(clientID,jointHandles[0], (simxFloat) 0*M_PI/180, (simxInt) simx_opmode_streaming);
 			extApi_sleepMs(1000);
 			*/
 
+			envia_comando(clientID,"#0P500");
+			envia_comando(clientID,"#0P1500");
 			envia_comando(clientID,"#0P2400");
 			envia_comando(clientID,"#0P1500");
-			envia_comando(clientID,"#0P500");
 
 			/* - joint[1]
 
