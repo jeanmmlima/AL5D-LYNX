@@ -4,7 +4,7 @@
 
 
 //Posicao inicial para todos os servos
-#define HOME_POS "#0P1500#1P1500#2P1500#3P1500#4P1500"
+#define HOME_POS "#0P500#1P1500#2P300#3P1500#4P1500"
 
 void handlePos(char[]);
 
@@ -22,7 +22,7 @@ void handlePos(char cmd[]){
 
 		if(cmd[i] == '#' && i == 0){
 			printf("\nNovo comando: \n");
-			pos = 0;
+
 		}
 		else if(cmd[i] == '#' && i != 0){
 			position = atof(temp);
@@ -31,6 +31,7 @@ void handlePos(char cmd[]){
 			printf("\nPosicao valor inteiro: %i",positionInt);
 			printf("\nNovo comando: \n");
 			pos = 0;
+			sprintf(temp,"000,");
 		}
 		else if(cmd[i-1]=='#'){
 			printf("Servo %c ",cmd[i]);
@@ -45,6 +46,8 @@ void handlePos(char cmd[]){
 				positionInt = atoi(temp);
 				printf("\nPosicao valor float: %f",position);
 				printf("\nPosicao valor inteiro: %i",positionInt);
+				pos = 0;
+				sprintf(temp,"000,");
 			}
 			
 		}
