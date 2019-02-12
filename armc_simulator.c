@@ -32,8 +32,16 @@ void envia_comando(int,char[]);
 //500-2500 position TO angles 
 
 //base: 500 - 2400
-float getPosBase(int);
 
+//ombro: 1100 - 2000
+
+//cotovelo: 1100 - 2100
+
+//punho: 500 - 2500
+
+float getPos(int,int);
+
+int getServ(int);
 
 int abre_porta(){
 
@@ -98,7 +106,7 @@ void envia_comando(int clientID, char cmd[]){
 		}
 		else if(cmd[i] == '#' && i != 0){
 			positionInt = atoi(temp);
-			float jointPos = getPosBase(positionInt);
+			float jointPos = getPos(serv,positionInt);
 			simxSetJointTargetPosition(clientID,jointHandles[serv], (simxFloat) jointPos*M_PI/180, (simxInt) simx_opmode_streaming);
 			extApi_sleepMs(1000);
 			printf("\nNovo comando: \n");
@@ -116,7 +124,7 @@ void envia_comando(int clientID, char cmd[]){
 
 			if(i == tam-1){
 				positionInt = atoi(temp);
-				float jointPos = getPosBase(positionInt);
+				float jointPos = getPos(serv,positionInt);
 				simxSetJointTargetPosition(clientID,jointHandles[serv], (simxFloat) jointPos*M_PI/180, (simxInt) simx_opmode_streaming);
 				extApi_sleepMs(1000);
 				sprintf(temp,"000,");
@@ -126,8 +134,30 @@ void envia_comando(int clientID, char cmd[]){
 	}
 }
 
-float getPosBase(int pos){
-	return ((0.0947 * pos) - 137.3684);
+float getPos(int servo, int pos){
+
+	if(servo == 0)
+		return ((0.0947 * pos) - 137.3684);
+	else if(servo == 1) 
+		return ((-0.09 * pos) + 135);
+	else if(servo == 2)
+		return ((0.1 * pos) - 60);
+	else if(servo == 3)
+		return ((-0.09 * pos) + 135);
+	else{
+		if(pos >= 1500)
+			return 1;
+		else
+			return 0;
+	}
+
+}
+
+int getServ(int servo){
+
+	if(servo > 0 && servo < 4){
+		return servo+1;
+	}
 }
 
 int main(){
@@ -172,10 +202,20 @@ int main(){
 			extApi_sleepMs(1000);
 			*/
 
-			envia_comando(clientID,"#0P500");
-			envia_comando(clientID,"#0P1500");
+			envia_comando(clientID,"#0P1500#1P1500#2P1500#3P1500");
+			//envia_comando(clientID,"#2P2100");
+			/*envia_comando(clientID,"#0P1500");
 			envia_comando(clientID,"#0P2400");
 			envia_comando(clientID,"#0P1500");
+			envia_comando(clientID,"#1P2000");
+			envia_comando(clientID,"#1P1100");
+			envia_comando(clientID,"#1P1500");
+			envia_comando(clientID,"#2P2100");
+			envia_comando(clientID,"#2P1100");
+			envia_comando(clientID,"#2P1500");
+			envia_comando(clientID,"#3P2500");
+			envia_comando(clientID,"#3P500");
+			envia_comando(clientID,"#3P1500");*/
 
 			/* - joint[1]
 
@@ -184,7 +224,7 @@ int main(){
 			simxSetJointTargetPosition(clientID,jointHandles[1], (simxFloat) 0*M_PI/180, (simxInt) simx_opmode_streaming);
 			extApi_sleepMs(1000);	
 
-			*/	
+			
 
 			// Cotovelo - joint[2]
 
@@ -199,6 +239,7 @@ int main(){
 			extApi_sleepMs(1000);
 			simxSetJointTargetPosition(clientID,jointHandles[3], (simxFloat) 0*M_PI/180, (simxInt) simx_opmode_streaming);
 			extApi_sleepMs(1000);
+			*/
 
     	}
 
