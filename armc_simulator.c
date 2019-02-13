@@ -41,7 +41,6 @@ void envia_comando(int,char[]);
 
 float getPos(int,int);
 
-int getServ(int);
 
 int abre_porta(){
 
@@ -109,6 +108,20 @@ void envia_comando(int clientID, char cmd[]){
 			float jointPos = getPos(serv,positionInt);
 			simxSetJointTargetPosition(clientID,jointHandles[serv], (simxFloat) jointPos*M_PI/180, (simxInt) simx_opmode_streaming);
 			extApi_sleepMs(1000);
+
+
+			if(serv != 4){
+
+				simxSetJointTargetPosition(clientID,jointHandles[serv], (simxFloat) jointPos*M_PI/180, (simxInt) simx_opmode_streaming);
+				extApi_sleepMs(1000);
+
+			}
+			else{
+				simxSetIntegerSignal(clientID,(const simxChar*) gripper,(simxInt) ((int)jointPos), (simxInt) simx_opmode_oneshot);
+				extApi_sleepMs(1000); 
+			}
+
+
 			printf("\nNovo comando: \n");
 			pos = 0;
 			sprintf(temp,"000,");
@@ -125,8 +138,17 @@ void envia_comando(int clientID, char cmd[]){
 			if(i == tam-1){
 				positionInt = atoi(temp);
 				float jointPos = getPos(serv,positionInt);
-				simxSetJointTargetPosition(clientID,jointHandles[serv], (simxFloat) jointPos*M_PI/180, (simxInt) simx_opmode_streaming);
-				extApi_sleepMs(1000);
+
+				if(serv != 4){
+
+					simxSetJointTargetPosition(clientID,jointHandles[serv], (simxFloat) jointPos*M_PI/180, (simxInt) simx_opmode_streaming);
+					extApi_sleepMs(1000);
+
+				}
+				else{
+					simxSetIntegerSignal(clientID,(const simxChar*) gripper,(simxInt) ((int)jointPos), (simxInt) simx_opmode_oneshot);
+					extApi_sleepMs(1000); 
+				}
 				sprintf(temp,"000,");
 			}
 			
@@ -151,13 +173,6 @@ float getPos(int servo, int pos){
 			return 0;
 	}
 
-}
-
-int getServ(int servo){
-
-	if(servo > 0 && servo < 4){
-		return servo+1;
-	}
 }
 
 int main(){
@@ -185,10 +200,11 @@ int main(){
     	while(simulacao_ativa(clientID)!=-1){
 
     		//Abre e fecha a garra a cada segundo
-    		simxSetIntegerSignal(clientID,(const simxChar*) gripper,(simxInt) 1, (simxInt) simx_opmode_oneshot);
+    		/*simxSetIntegerSignal(clientID,(const simxChar*) gripper,(simxInt) 1, (simxInt) simx_opmode_oneshot);
 			extApi_sleepMs(1000);    		
 			simxSetIntegerSignal(clientID,(const simxChar*) gripper,(simxInt) 0, (simxInt) simx_opmode_oneshot);
 			extApi_sleepMs(1000); 
+			*/
 
 			// Base - joint[0]
 			/*	
@@ -202,7 +218,8 @@ int main(){
 			extApi_sleepMs(1000);
 			*/
 
-			envia_comando(clientID,"#0P1500#1P1500#2P1500#3P1500");
+			envia_comando(clientID,"#0P1500#1P1500#2P1500#3P1500#4P1500");
+			envia_comando(clientID,"#0P2500#1P1500#2P1500#3P2500#4P1400");
 			//envia_comando(clientID,"#2P2100");
 			/*envia_comando(clientID,"#0P1500");
 			envia_comando(clientID,"#0P2400");
