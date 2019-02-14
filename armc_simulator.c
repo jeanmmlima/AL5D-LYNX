@@ -8,21 +8,14 @@ DEVELOPED BY: Eng. Msc. Jean M. M. Lima.
 
 */
 
-#include "remoteApi/extApi.h"
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <stdbool.h> //if your system provides it. That defines a number of macros, including bool, false, and true (defined to _Bool, 0, and 1 respectively).
-
-//Posicao inicial para todos os servos
-#define HOME_POS "#0P1500#1P1500#2P1500#3P1500#4P1500"
+#include "armc_simulator.h"
 
 //Handles
 int jointHandles[4];
 int modelBase = 0;
 char gripper[] = "PhantomXPincher_gripperClose";
 
-
+/*
 int abre_porta();
 void setup(int);
 void fecha_porta(int);
@@ -40,7 +33,7 @@ void envia_comando(int,char[]);
 //punho: 500 - 2500
 
 float getPos(int,int);
-
+*/
 
 int abre_porta(){
 
@@ -85,6 +78,25 @@ void fecha_porta(int clientID){
 
 int simulacao_ativa(int clientID){
 	return simxGetConnectionId(clientID);
+}
+
+float getPos(int servo, int pos){
+
+	if(servo == 0)
+		return ((0.0947 * pos) - 137.3684);
+	else if(servo == 1) 
+		return ((-0.09 * pos) + 135);
+	else if(servo == 2)
+		return ((0.1 * pos) - 60);
+	else if(servo == 3)
+		return ((-0.09 * pos) + 135);
+	else{
+		if(pos >= 1500)
+			return 1;
+		else
+			return 0;
+	}
+
 }
 
 void envia_comando(int clientID, char cmd[]){
@@ -154,121 +166,4 @@ void envia_comando(int clientID, char cmd[]){
 			
 		}
 	}
-}
-
-float getPos(int servo, int pos){
-
-	if(servo == 0)
-		return ((0.0947 * pos) - 137.3684);
-	else if(servo == 1) 
-		return ((-0.09 * pos) + 135);
-	else if(servo == 2)
-		return ((0.1 * pos) - 60);
-	else if(servo == 3)
-		return ((-0.09 * pos) + 135);
-	else{
-		if(pos >= 1500)
-			return 1;
-		else
-			return 0;
-	}
-
-}
-
-int main(){
-
-	//inicial variables	
-	//char serverIP[] = "127.0.0.1";
-	//int serverPort = 19999;
-	//int jointHandles[4];
-	//char jointNames[4][22]; //4 juntos, 22 caracteres em cada
-	//int modelBase = 0;
-	//char modelBaseName[] = "";
-	//char gripper[] = "PhantomXPincher_gripperClose";
-
-	
-	int clientID = abre_porta();
-	if(clientID  != -1){
-
-  		printf("Servidor conectado!\n");
-
-  		setup(clientID);
-  		
-
-
-    	// Enquanto a simulacao for ativa
-    	while(simulacao_ativa(clientID)!=-1){
-
-    		//Abre e fecha a garra a cada segundo
-    		/*simxSetIntegerSignal(clientID,(const simxChar*) gripper,(simxInt) 1, (simxInt) simx_opmode_oneshot);
-			extApi_sleepMs(1000);    		
-			simxSetIntegerSignal(clientID,(const simxChar*) gripper,(simxInt) 0, (simxInt) simx_opmode_oneshot);
-			extApi_sleepMs(1000); 
-			*/
-
-			// Base - joint[0]
-			/*	
-			simxSetJointTargetPosition(clientID,jointHandles[0], (simxFloat) 90*M_PI/180, (simxInt) simx_opmode_streaming);
-			extApi_sleepMs(1000);
-			simxSetJointTargetPosition(clientID,jointHandles[0], (simxFloat) 0*M_PI/180, (simxInt) simx_opmode_streaming);
-			extApi_sleepMs(1000);
-			simxSetJointTargetPosition(clientID,jointHandles[0], (simxFloat) -90*M_PI/180, (simxInt) simx_opmode_streaming);
-			extApi_sleepMs(1000);
-			simxSetJointTargetPosition(clientID,jointHandles[0], (simxFloat) 0*M_PI/180, (simxInt) simx_opmode_streaming);
-			extApi_sleepMs(1000);
-			*/
-
-			envia_comando(clientID,"#0P1500#1P1500#2P1500#3P1500#4P1500");
-			envia_comando(clientID,"#0P2500#1P1500#2P1500#3P2500#4P1400");
-			//envia_comando(clientID,"#2P2100");
-			/*envia_comando(clientID,"#0P1500");
-			envia_comando(clientID,"#0P2400");
-			envia_comando(clientID,"#0P1500");
-			envia_comando(clientID,"#1P2000");
-			envia_comando(clientID,"#1P1100");
-			envia_comando(clientID,"#1P1500");
-			envia_comando(clientID,"#2P2100");
-			envia_comando(clientID,"#2P1100");
-			envia_comando(clientID,"#2P1500");
-			envia_comando(clientID,"#3P2500");
-			envia_comando(clientID,"#3P500");
-			envia_comando(clientID,"#3P1500");*/
-
-			/* - joint[1]
-
-			simxSetJointTargetPosition(clientID,jointHandles[1], (simxFloat) 90*M_PI/180, (simxInt) simx_opmode_streaming);
-			extApi_sleepMs(1000);
-			simxSetJointTargetPosition(clientID,jointHandles[1], (simxFloat) 0*M_PI/180, (simxInt) simx_opmode_streaming);
-			extApi_sleepMs(1000);	
-
-			
-
-			// Cotovelo - joint[2]
-
-			simxSetJointTargetPosition(clientID,jointHandles[2], (simxFloat) 90*M_PI/180, (simxInt) simx_opmode_streaming);
-			extApi_sleepMs(1000);
-			simxSetJointTargetPosition(clientID,jointHandles[2], (simxFloat) 0*M_PI/180, (simxInt) simx_opmode_streaming);
-			extApi_sleepMs(1000);	
-
-			// Punho - joint[3]
-
-			simxSetJointTargetPosition(clientID,jointHandles[3], (simxFloat) 90*M_PI/180, (simxInt) simx_opmode_streaming);
-			extApi_sleepMs(1000);
-			simxSetJointTargetPosition(clientID,jointHandles[3], (simxFloat) 0*M_PI/180, (simxInt) simx_opmode_streaming);
-			extApi_sleepMs(1000);
-			*/
-
-    	}
-
-    	fecha_porta(clientID);
-
-
-  	}
-  	else {
-  		printf("Servidor não foi conectado!\n");
-  		return 0;
-  	}
-
-
-	
 }
