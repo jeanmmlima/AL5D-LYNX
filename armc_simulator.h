@@ -59,6 +59,7 @@ DEVELOPED BY: Eng. Msc. Jean M. M. Lima.
 	int simulacao_ativa(int);
 	void envia_comando(int,char[]);
 	float getPos(int,int);
+	void ufrn_header(void);
 
 
 #endif
