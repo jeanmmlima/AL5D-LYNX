@@ -17,6 +17,7 @@ DEVELOPED BY: Eng. Msc. Jean M. M. Lima.
 	#include <stdio.h>
 	#include <string.h>
 	#include <math.h>
+	#include <stdlib.h>
 	#include <stdbool.h>
 	#include "v_repConst.h"
 	#include "v_repLib.h"
