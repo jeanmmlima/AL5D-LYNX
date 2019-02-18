@@ -50,6 +50,9 @@ DEVELOPED BY: Eng. Msc. Jean M. M. Lima.
 	#define GRI_MIN 1300
 	#define GRI_MAX 2400
 
+	//Tempo em ms para execução das instruções
+	#define TIME 500
+
 	int abre_porta();
 	void setup(int);
 	void fecha_porta(int);

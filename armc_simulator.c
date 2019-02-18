@@ -112,39 +112,39 @@ void envia_comando(int clientID, char cmd[]){
 	
 
 		if(cmd[i] == '#' && i == 0){
-			printf("\nNovo comando: \n");
+		//	printf("\nNovo comando: \n");
 			pos = 0;
 		}
 		else if(cmd[i] == '#' && i != 0){
 			positionInt = atoi(temp);
 			float jointPos = getPos(serv,positionInt);
 			simxSetJointTargetPosition(clientID,jointHandles[serv], (simxFloat) jointPos*M_PI/180, (simxInt) simx_opmode_streaming);
-			extApi_sleepMs(1000);
+			extApi_sleepMs(TIME);
 
 
 			if(serv != 4){
 
 				simxSetJointTargetPosition(clientID,jointHandles[serv], (simxFloat) jointPos*M_PI/180, (simxInt) simx_opmode_streaming);
-				extApi_sleepMs(1000);
+				extApi_sleepMs(TIME);
 
 			}
 			else{
 				simxSetIntegerSignal(clientID,(const simxChar*) gripper,(simxInt) ((int)jointPos), (simxInt) simx_opmode_oneshot);
-				extApi_sleepMs(1000); 
+				extApi_sleepMs(TIME); 
 			}
 
 
-			printf("\nNovo comando: \n");
+			//printf("\nNovo comando: \n");
 			pos = 0;
 			sprintf(temp,"000,");
 		}
 		else if(cmd[i-1]=='#'){
 			serv = (int) cmd[i] - '0';
-			printf("Servo %i ",serv);
+			//printf("Servo %i ",serv);
 		}
 		else if(cmd[i] !='P'){
 			temp[pos] = cmd[i];
-			printf("%c",temp[pos]);
+			//printf("%c",temp[pos]);
 			pos = pos + 1;
 
 			if(i == tam-1){
@@ -154,12 +154,12 @@ void envia_comando(int clientID, char cmd[]){
 				if(serv != 4){
 
 					simxSetJointTargetPosition(clientID,jointHandles[serv], (simxFloat) jointPos*M_PI/180, (simxInt) simx_opmode_streaming);
-					extApi_sleepMs(1000);
+					extApi_sleepMs(TIME);
 
 				}
 				else{
 					simxSetIntegerSignal(clientID,(const simxChar*) gripper,(simxInt) ((int)jointPos), (simxInt) simx_opmode_oneshot);
-					extApi_sleepMs(1000); 
+					extApi_sleepMs(TIME); 
 				}
 				sprintf(temp,"000,");
 			}
