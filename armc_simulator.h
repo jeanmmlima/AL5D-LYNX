@@ -53,14 +53,15 @@ DEVELOPED BY: Eng. Msc. Jean M. M. Lima.
 
 	//Tempo em ms para execução das instruções
 	#define TIME 500
-
+	
+	void ufrn_header();
 	int abre_porta();
 	void setup(int);
 	void fecha_porta(int);
 	int simulacao_ativa(int);
 	void envia_comando(int,char[]);
 	float getPos(int,int);
-	void ufrn_header(void);
+	
 
 
 #endif
