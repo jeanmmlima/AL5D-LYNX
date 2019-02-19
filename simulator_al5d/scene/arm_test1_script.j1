@@ -1,0 +1,92 @@
+-- This is a threaded script, and is just an example!
+
+
+
+function sysCall_threadmain()
+
+    jointHandles={-1,-1,-1,-1}
+
+    for i=1,4,1 do
+
+        jointHandles[i]=sim.getObjectHandle('PhantomXPincher_joint'..i)
+
+    end
+
+
+
+    modelBase=sim.getObjectHandle('PhantomXPincher')
+
+    modelBaseName=sim.getObjectName(modelBase)
+
+
+
+    -- Set-p some of the RML vectors:
+
+    vel=180
+
+    accel=20
+
+    jerk=8
+
+    currentVel={0,0,0,0}
+
+    currentAccel={0,0,0,0}
+
+    maxVel={vel*math.pi/180,vel*math.pi/180,vel*math.pi/180,vel*math.pi/180}
+
+    maxAccel={accel*math.pi/180,accel*math.pi/180,accel*math.pi/180,accel*math.pi/180}
+
+    maxJerk={jerk*math.pi/180,jerk*math.pi/180,jerk*math.pi/180,jerk*math.pi/180}
+
+    targetVel={0,0,0,0}
+
+    
+
+    -- Close the gripper:
+
+    sim.setIntegerSignal(modelBaseName..'_gripperClose',1)
+
+    
+    sim.wait(1)
+    
+    --movendo a base
+    print(sim.getJointTargetVelocity(jointHandles[1]))
+    sim.setJointTargetVelocity(jointHandles[1],20*math.pi/180)
+    print(sim.getJointTargetVelocity(jointHandles[1]))
+    sim.setJointTargetPosition(jointHandles[1],90*math.pi/180)
+    
+
+
+    sim.wait(2)
+    
+    sim.setJointTargetVelocity(jointHandles[1],60*math.pi/180)
+    print(sim.getJointTargetVelocity(jointHandles[1]))
+    sim.setJointTargetPosition(jointHandles[1],0*math.pi/180)
+
+
+    --[[
+
+    targetPos1={90*math.pi/180,60*math.pi/180,90*math.pi/180,-90*math.pi/180}
+
+    sim.rmlMoveToJointPositions(jointHandles,-1,currentVel,currentAccel,maxVel,maxAccel,maxJerk,targetPos1,targetVel)
+
+
+
+    targetPos2={-90*math.pi/180,-60*math.pi/180,-90*math.pi/180,90*math.pi/180}
+
+    sim.rmlMoveToJointPositions(jointHandles,-1,currentVel,currentAccel,maxVel,maxAccel,maxJerk,targetPos2,targetVel)
+
+
+
+    targetPos3={0,0,0,0}
+
+    sim.rmlMoveToJointPositions(jointHandles,-1,currentVel,currentAccel,maxVel,maxAccel,maxJerk,targetPos3,targetVel)
+
+    --]]
+
+    -- Open the gripper:
+
+    sim.setIntegerSignal(modelBaseName..'_gripperClose',0)
+    
+
+end
