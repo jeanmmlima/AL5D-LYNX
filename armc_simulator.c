@@ -37,15 +37,15 @@ float getPos(int,int);
 
 void ufrn_header()
 {
-	printf("/*************************************************************/\n");
-	printf("/*       UNIVERSIDADE FEDERAL DO RIO GRANDE DO NORTE         */\n");
-	printf("/*   DEPARTAMENTO DE ENGENHARIA DE COMPUTAÇÃO E AUTOMAÇÃO    */\n");
-	printf("/*							                                                   */\n");
-	printf("/*        SIMULADOR DO BRAÇO ROBÓTICO LYNX AL5D - v2.0 	     */\n");
-	printf("/*							                                                   */\n");
-	printf("/*   DESENVOLVEDOR:					                                    */\n");
-	printf("/*	- ENG. M.SC. JEAN MARIO MOREIRA DE LIMA                   */\n");
-	printf("/*************************************************************/\n\n");
+	printf("/***********************************************************/\n");
+	printf("       UNIVERSIDADE FEDERAL DO RIO GRANDE DO NORTE         \n");
+	printf("   DEPARTAMENTO DE ENGENHARIA DE COMPUTAÇÃO E AUTOMAÇÃO    \n");
+	printf("							                               \n");
+	printf("        SIMULADOR DO BRAÇO ROBÓTICO LYNX AL5D - v2.0 	   \n");
+	printf("							                               \n");
+	printf("   DESENVOLVEDOR:					                       \n");
+	printf("	- ENG. M.SC. JEAN MARIO MOREIRA DE LIMA                \n");
+	printf("/************************************************************/\n\n");
 }
 
 int abre_porta(){
